@@ -3,6 +3,7 @@ import cors from "cors";
 import { AppError } from "./src/utils/customAppError/customAppError.js";
 import { corsOptions } from "./src/config/cors/corsOptions.js";
 import { globalError } from "./src/middleware/globalMiddleware/globalMiddleware.js";
+import { connectDB } from "./src/config/DB/connectionDB.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -31,14 +32,20 @@ app.use(globalError);
 //server start
 const startServer = async () => {
   try {
-    app.listen(PORT, () => {
+    await connectDB();
+    const server = app.listen(PORT, () => {
       console.log(
         `🚀  Database ready & Server runing: http://localhost:${PORT}`,
       );
     });
+
+    // পোর্ট ব্লক বা অন্য কোনো সার্ভার এরর ক্যাচ করার জন্য
+    server.on("error", (error) => {
+      console.error("❌ Server error:", error);
+      process.exit(1);
+    });
   } catch (error) {
     console.error("❌ Database connection fail & Server can't runing:", error);
-    process.exit(1);
   }
 };
 //server start
