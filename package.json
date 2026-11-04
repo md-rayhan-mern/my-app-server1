@@ -1,0 +1,32 @@
+{
+  "name": "my-server1",
+  "version": "1.0.1",
+  "description": "this is diployment projekt",
+  "keywords": [
+    "server",
+    "papon",
+    "khan"
+  ],
+  "homepage": "https://github.com/md-rayhan-mern/my-app-server1#readme",
+  "bugs": {
+    "url": "https://github.com/md-rayhan-mern/my-app-server1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/md-rayhan-mern/my-app-server1.git"
+  },
+  "license": "ISC",
+  "author": "Papon khan",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "dev": "nodemon --env-file=.env server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4",
+    "nodemon": "^3.1.14"
+  }
+}
