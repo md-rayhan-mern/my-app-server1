@@ -3,12 +3,16 @@ export const globalError = (err, req, res, next) => {
     return next(err);
   }
 
-  let error = Object.create(err); // Prototype অক্ষুণ্ন রাখার জন্য
-  error.statusCode = err.statusCode || 500;
-  error.status = err.status || "error";
-  error.message = err.message || "Internal Server Error";
-  error.name = err.name || "Error";
-  error.code = err.code || "INTERNAL_SERVER_ERROR";
+  // ১. অরিজিনাল err থেকে সরাসরি মানগুলো নিয়ে একটি প্লেইন অবজেক্ট তৈরি করছি
+  let error = {
+    statusCode: err.statusCode || 500,
+    status: err.status || "error",
+    message: err.message || "Internal Server Error",
+    name: err.name || "Error",
+    code: err.code || "INTERNAL_SERVER_ERROR",
+    stack: err.stack,
+    isOperational: err.isOperational || false,
+  };
 
   // ১. MongoDB Duplicate Key Error (যেমন: একই আইডি বা নাম বারবার দিলে)
   if (err.code === 11000) {
@@ -43,7 +47,7 @@ export const globalError = (err, req, res, next) => {
     return res.status(error.statusCode).json({
       status: error.status,
       message: error.message,
-      error: error,
+      //error: error,
       stack: error.stack,
     });
   } else {
