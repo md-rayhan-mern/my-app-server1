@@ -1,6 +1,7 @@
 import express, { urlencoded } from "express";
 import dns from "node:dns";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { AppError } from "./src/utils/customAppError/customAppError.js";
 import { corsOptions } from "./src/config/cors/corsOptions.js";
 import { mainRoute } from "./src/all-routes/mainRoute.js";
@@ -11,6 +12,7 @@ const app = express();
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 const PORT = process.env.PORT || 4000;
 app.use(cors(corsOptions));
+
 app.use(
   express.json({
     limit: "50kb",
@@ -20,13 +22,13 @@ app.use(
   }),
 );
 app.use(urlencoded({ extended: true, limit: "50kb" }));
-
+app.use(cookieParser());
 //all router
 app.use("/", mainRoute);
 
 //404 route
 app.all("*any", (req, res, next) => {
-  next(new AppError(404, `Not found route ${req.originalUrl}`));
+  next(new AppError(`Not found route ${req.originalUrl}`, 404));
 });
 
 //global errorHandler

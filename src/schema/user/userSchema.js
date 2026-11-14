@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema(
     birthDate: {
       type: Date,
     },
+    refreshToken: { type: String, select: false }, // সেশন ভ্যালিডেশনের জন্য
   },
   {
     timestamps: true,

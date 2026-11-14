@@ -12,8 +12,8 @@ export const corsOptions = {
     } else {
       callback(
         new AppError(
-          403,
           "CORS পলিসির কারণে এই অরিজিন থেকে অ্যাক্সেস অনুমোদিত নয়!",
+          403,
         ),
       );
     }
