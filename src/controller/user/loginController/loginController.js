@@ -30,10 +30,15 @@ export const loginController = asyncWrapper(async (req, res, next) => {
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new apiResponse(200, { user, accessToken }, "Success login"));
 });
+
 //refreshToken service (নতুন Access Token নেওয়ার জন্য)
 export const refreshTokenController = asyncWrapper(async (req, res, next) => {
   // ব্রাউজার থেকে স্বয়ংক্রিয়ভাবে আসা HttpOnly কুকি থেকে টোকেন নেওয়া হলো
   const incomingRefreshToken = req.cookies?.refreshToken;
+  console.log(`login controller cookies: ${req.cookies?.refreshToken}`);
+  if (!incomingRefreshToken) {
+    throw new AppError("Refresh token is required", 401);
+  }
   // সার্ভিস কল করে নতুন জোড়া টোকেন নেওয়া হলো (Token Rotation)
   const { accessToken, refreshToken } =
     await refreshTokenService(incomingRefreshToken);
@@ -49,6 +54,7 @@ export const refreshTokenController = asyncWrapper(async (req, res, next) => {
       ),
     );
 });
+
 //logout controller
 export const logoutController = asyncWrapper(async (req, res, next) => {
   // ডেটাবেস থেকে ইউজারের refreshToken মুছে ফেলা (যদি verifyJWT মিডলওয়্যার থেকে req.user পাওয়া যায়)

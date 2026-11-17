@@ -19,6 +19,7 @@ export const loginService = async (identifier, password) => {
     throw new AppError("Invalid credentials", 401);
   }
   const { accessToken, refreshToken } = generateTokens(user);
+
   // ৪. ডেটাবেসে Refresh Token সেভ রাখা
   user.refreshToken = refreshToken;
   await user.save({ validateBeforeSave: false });
@@ -40,6 +41,7 @@ export const refreshTokenService = async (incomingRefreshToken) => {
   }
   // ১. টোকেন ভেরিফাই করা
   let decoded;
+
   try {
     decoded = verifyRefreshToken(incomingRefreshToken);
   } catch (err) {
