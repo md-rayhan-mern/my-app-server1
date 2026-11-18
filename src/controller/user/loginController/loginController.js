@@ -58,6 +58,8 @@ export const refreshTokenController = asyncWrapper(async (req, res, next) => {
 //logout controller
 export const logoutController = asyncWrapper(async (req, res, next) => {
   // ডেটাবেস থেকে ইউজারের refreshToken মুছে ফেলা (যদি verifyJWT মিডলওয়্যার থেকে req.user পাওয়া যায়)
+  // console.log(req.user);
+
   if (req.user?.id) {
     await User.findByIdAndUpdate(req.user.id, {
       $unset: { refreshToken: 1 },
@@ -71,5 +73,5 @@ export const logoutController = asyncWrapper(async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     })
-    .json(new apiResponse(200, null, "Logout successful"));
+    .json(new apiResponse(200, null, "Logout successful test"));
 });
