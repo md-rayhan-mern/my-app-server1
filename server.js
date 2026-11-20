@@ -9,8 +9,10 @@ import { globalError } from "./src/middleware/globalMiddleware/globalMiddleware.
 import { connectDB } from "./src/config/DB/connectionDB.js";
 
 const app = express();
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+//dns.setServers(["8.8.8.8", "8.8.4.4"]);
 const PORT = process.env.PORT || 4000;
+// প্রোডাকশনে প্রক্সি ট্রাস্ট করার জন্য (কুকি ও রেট-লিমিটারের জন্য জরুরি)
+app.set("trust proxy", 1);
 app.use(cors(corsOptions));
 
 app.use(
@@ -23,6 +25,13 @@ app.use(
 );
 app.use(urlencoded({ extended: true, limit: "50kb" }));
 app.use(cookieParser());
+
+// রুট রাউট (সার্ভার লাইভ আছে কিনা দেখার জন্য)
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .json({ success: true, message: "Server is running smoothly!" });
+});
 //all router
 app.use("/", mainRoute);
 
