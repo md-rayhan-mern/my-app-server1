@@ -1,9 +1,13 @@
 import { AppError } from "../../utils/customAppError/customAppError.js";
-const allowOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "http://localhost:4000",
-];
+// ১. .env থেকে সব লিংক কমা দিয়ে আলাদা করে স্পেস (.trim) মুছে নেওয়া হলো
+const allOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((url) =>
+  url.trim(),
+) || ["http://localhost:5173", "https://my-app-front1.vercel.app"];
+// ২. কন্ডিশন: প্রোডাকশন (Render) হলে শুধুমাত্র https (লাইভ) লিংকগুলো নেবে, আর লোকালে সব নেবে
+const allowOrigins =
+  process.env.NODE_ENV === "production"
+    ? allOrigins.filter((url) => url.startsWith("https://"))
+    : allOrigins;
 
 export const corsOptions = {
   origin: (origin, callback) => {
