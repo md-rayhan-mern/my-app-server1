@@ -50,6 +50,24 @@ const userSchema = new mongoose.Schema(
     birthDate: {
       type: Date,
     },
+    // নতুন যোগ করা এড্রেস অংশ
+    address: {
+      addressType: {
+        type: String,
+        enum: {
+          values: ["home", "office", "other"],
+          message: "Address type must be either home, office, or other",
+        },
+        lowercase: true,
+        default: "home",
+        required: [true, "Address type is required"],
+      },
+      addressText: {
+        type: String,
+        required: [true, "Address text is required"],
+        trim: true,
+      },
+    },
     refreshToken: { type: String, select: false }, // সেশন ভ্যালিডেশনের জন্য
   },
   {

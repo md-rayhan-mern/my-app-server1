@@ -26,6 +26,8 @@ export const loginService = async (identifier, password) => {
   const userResponse = user.toObject();
   delete userResponse.password;
   delete userResponse.refreshToken;
+  delete userResponse.phone;
+  delete userResponse.role;
 
   return {
     user: userResponse,

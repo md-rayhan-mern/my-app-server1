@@ -1,9 +1,9 @@
 import { User } from "../../../schema/user/userSchema.js";
 import { AppError } from "../../../utils/customAppError/customAppError.js";
+import { generateTokens } from "../../../utils/authUtilsJWT/auth.utils.js";
 
 export const userCreateService = async (userData) => {
-  const { name, email, phone, password, gender, profilePicture, birthDate } =
-    userData;
+  const { name, email, phone, password, address } = userData;
   const query = [];
   if (email) query.push({ email: email.toLowerCase().trim() });
   if (phone) query.push({ phone: phone.trim() });
@@ -20,13 +20,23 @@ export const userCreateService = async (userData) => {
     email: email,
     phone: phone,
     password: password,
-    gender: gender || "Other",
-    profilePicture: profilePicture || "https://placeholder.com",
-    birthDate: birthDate || null,
+    address: {
+      addressType: address?.addressType || "home",
+      addressText: address?.addressText?.trim(),
+    },
   });
-
+  // অটো-লগইনের জন্য Access এবং Refresh টোকেন জেনারেট
+  const { accessToken, refreshToken } = generateTokens(newUser);
+  newUser.refreshToken = refreshToken;
   const savedUser = await newUser.save();
   const userResponse = savedUser.toObject();
   delete userResponse.password; // Remove the password field from the response
-  return userResponse;
+  delete userResponse.refreshToken;
+  delete userResponse.phone;
+  delete userResponse.role;
+  return {
+    user: userResponse,
+    accessToken,
+    refreshToken,
+  };
 };

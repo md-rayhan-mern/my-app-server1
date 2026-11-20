@@ -35,7 +35,7 @@ export const loginController = asyncWrapper(async (req, res, next) => {
 export const refreshTokenController = asyncWrapper(async (req, res, next) => {
   // ব্রাউজার থেকে স্বয়ংক্রিয়ভাবে আসা HttpOnly কুকি থেকে টোকেন নেওয়া হলো
   const incomingRefreshToken = req.cookies?.refreshToken;
-  console.log(`login controller cookies: ${req.cookies?.refreshToken}`);
+  //console.log(`login controller cookies: ${req.cookies?.refreshToken}`);
   if (!incomingRefreshToken) {
     throw new AppError("Refresh token is required", 401);
   }
