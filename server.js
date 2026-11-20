@@ -9,7 +9,10 @@ import { globalError } from "./src/middleware/globalMiddleware/globalMiddleware.
 import { connectDB } from "./src/config/DB/connectionDB.js";
 
 const app = express();
-//dns.setServers(["8.8.8.8", "8.8.4.4"]);
+// শুধুমাত্র লোকাল কম্পিউটারে কাস্টম DNS চালু থাকবে, লাইভ সার্ভারে (Render) নয়
+if (process.env.NODE_ENV !== "production") {
+  dns.setServers(["8.8.8.8", "8.8.4.4"]);
+}
 const PORT = process.env.PORT || 4000;
 // প্রোডাকশনে প্রক্সি ট্রাস্ট করার জন্য (কুকি ও রেট-লিমিটারের জন্য জরুরি)
 app.set("trust proxy", 1);
@@ -47,7 +50,7 @@ app.use(globalError);
 const startServer = async () => {
   try {
     await connectDB();
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log(
         `🚀  Database ready & Server runing: http://localhost:${PORT}`,
       );
