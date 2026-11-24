@@ -84,7 +84,7 @@ class ReactionService {
       const updatedTarget = await TargetModel.findByIdAndUpdate(
         targetId,
         updateQuery,
-        { new: true, session },
+        { returnDocument: "after", session },
       ).select("reactionCounts");
 
       await session.commitTransaction();
