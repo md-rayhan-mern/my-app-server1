@@ -35,20 +35,26 @@ const userSchema = new mongoose.Schema(
       },
       default: "Other",
     },
-    role: {
-      type: String,
-      enum: {
-        values: ["user", "admin"],
-        message: "Role must be either user or admin",
-      },
-      default: "user",
-    },
-    profilePicture: {
+    profilePic: {
       type: String,
       default: "https://placeholder.com",
     },
+    coverPhoto: {
+      type: String,
+      default: "",
+    },
+    friendsCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     birthDate: {
       type: Date,
+    },
+    bio: {
+      type: String,
+      maxlength: 250,
+      default: "",
     },
     // নতুন যোগ করা এড্রেস অংশ
     address: {

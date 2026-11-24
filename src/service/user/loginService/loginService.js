@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { User } from "../../../schema/user/userSchema.js";
+import { User } from "../../../schema/user/user.model.js";
 import { AppError } from "../../../utils/customAppError/customAppError.js";
 import {
   generateTokens,
@@ -27,7 +27,6 @@ export const loginService = async (identifier, password) => {
   delete userResponse.password;
   delete userResponse.refreshToken;
   delete userResponse.phone;
-  delete userResponse.role;
 
   return {
     user: userResponse,

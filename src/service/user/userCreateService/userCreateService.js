@@ -1,4 +1,4 @@
-import { User } from "../../../schema/user/userSchema.js";
+import { User } from "../../../schema/user/user.model.js";
 import { AppError } from "../../../utils/customAppError/customAppError.js";
 import { generateTokens } from "../../../utils/authUtilsJWT/auth.utils.js";
 
@@ -33,7 +33,6 @@ export const userCreateService = async (userData) => {
   delete userResponse.password; // Remove the password field from the response
   delete userResponse.refreshToken;
   delete userResponse.phone;
-  delete userResponse.role;
   return {
     user: userResponse,
     accessToken,

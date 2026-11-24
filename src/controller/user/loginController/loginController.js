@@ -5,7 +5,7 @@ import {
   loginService,
   refreshTokenService,
 } from "../../../service/user/loginService/loginService.js";
-import { User } from "../../../schema/user/userSchema.js";
+import { User } from "../../../schema/user/user.model.js";
 // ১. কুকির নিরাপত্তা সেটিংস
 const cookieOptions = {
   httpOnly: true,

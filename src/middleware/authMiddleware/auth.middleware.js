@@ -22,7 +22,42 @@ export const verifyJWT = asyncWrapper(async (req, res, next) => {
     throw new AppError("Unauthorized request: Token expired or invalid", 401);
   }
   // ৪. টোকেনের ভেতরের তথ্য (id, role) req.user-এ সেট করা, যাতে পরের কন্ট্রোলার তা পায়
-  req.user = decoded;
+  req.user = {
+    ...decoded,
+    _id: decoded._id || decoded.id || decoded.userId,
+  };
   // ৫. সব ঠিক থাকলে পরের ফাংশনে (কন্ট্রোলারে) যাওয়ার অনুমতি দেওয়া
   next();
+});
+
+// src/middlewares/authMiddleware/auth.middleware.js
+
+export const optionalVerifyJWT = asyncWrapper(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  // ১. হেডারে টোকেন না থাকলে সে আসলেই Guest User -> কোনো এরর ছাড়াই সামনে যেতে দেবে
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    req.user = null;
+    return next();
+  }
+
+  // ২. "Bearer " বাদ দিয়ে আসল টোকেনটি নেওয়া ([1] দেওয়া জরুরি)
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    req.user = null;
+    return next();
+  }
+
+  // ৩. হেডারে টোকেন থাকলে সেটি অবশ্যই ভ্যালিড হতে হবে।
+  // মেয়াদ শেষ হলে 401 এরর দেবে যাতে আপনার Axios Interceptor Refresh Token দিয়ে নতুন টোকেন নিতে পারে!
+  try {
+    const decoded = verifyAccessToken(token);
+    req.user = {
+      ...decoded,
+      _id: decoded._id || decoded.id || decoded.userId,
+    };
+    next();
+  } catch (error) {
+    throw new AppError("Unauthorized request: Token expired or invalid", 401);
+  }
 });
