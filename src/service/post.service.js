@@ -19,8 +19,6 @@ class PostService {
   }
 
   // হোম নিউজফিড জেনারেট করার সার্ভিস (Aggregation Pipeline)
-  // src/service/post.service.js
-
   async getNewsFeed({ userId = null, cursor = null, limit = 10 }) {
     let matchCondition = { privacy: "public" };
     let currentUserId = null;
