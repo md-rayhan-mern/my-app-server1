@@ -21,6 +21,7 @@ export const createPost = asyncWrapper(async (req, res) => {
 export const getNewsfeed = asyncWrapper(async (req, res) => {
   const limit = parseInt(req.query.limit, 10) || 10;
   const cursor = req.query.cursor || null; // শেষ পোস্টের createdAt সময়
+  console.log(req.user?._id);
 
   const result = await postService.getNewsFeed({
     userId: req.user?._id || null,
